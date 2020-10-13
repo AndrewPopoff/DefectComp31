@@ -1,0 +1,51 @@
+﻿@model AppUserViewModel
+
+@{
+    ViewData["Title"] = "Пользователи";
+    Layout = "_LayoutList";
+}
+
+<div class="text-left">
+    <a asp-action="Create" class="btn btn-primary" asp-route-page="@Model.Page"
+       asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()"
+       asp-route-sort="@Model.Sort">Добавить нового пользователя</a>
+</div>
+<br />
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-warning">
+        @TempData["message"]
+        @if (Model.CurrentID != null)
+        {
+            <a asp-action="Index"
+               asp-route-currentID="@Model.CurrentID"
+               asp-route-flagUpdate="true"
+               asp-route-page="@Model.Page"
+               asp-route-sort="@Model.Sort"
+               class="btn btn-primary">Перейти к записи</a>
+        }
+    </div>
+}
+
+<div class="text-danger" asp-validation-summary="All"></div>
+
+@(Html
+            .Grid(Model.AppUsers)
+            .Build(columns =>
+            {
+                columns.Add(model => model.UserName).Titled("Пользователи");
+                columns.Add(model => Html.Partial("EditDeleteBtns", new AppUserCreateModel { Id = model.Id, Page = Model.Page, Sort = Model.Sort })).Titled("Действия");
+            })
+            .Using(GridFilterMode.Header)
+            .Empty("Нет данных")
+            .AppendCss("table-hover")
+            .RowAttributed(model => new { @class = model.Id == Model.CurrentID ? "bg-success" : null })
+            .Filterable()
+            .Sortable()
+            .Pageable(pager =>
+            {
+                pager.CurrentPage = Model.Page;
+            })
+)
+

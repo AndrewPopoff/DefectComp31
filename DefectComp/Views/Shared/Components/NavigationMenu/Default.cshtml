@@ -1,0 +1,33 @@
+﻿<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" asp-controller="Home" asp-action="Index">Компенсация брака</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item @(ViewBag.SelectedItem?.ToString() == "Order" ? "active" : "" )">
+                <a class="nav-link" asp-controller="Order" asp-action="Index">Заявки</a>
+            </li>
+            <li class="nav-item @(ViewBag.SelectedItem?.ToString() == "Status" ? "active" : "" )">
+                <a class="nav-link" asp-controller="Status" asp-action="Index">Статусы заявок</a>
+            </li>
+            <li class="nav-item @(ViewBag.SelectedItem?.ToString() == "Enterprise" ? "active" : "" )">
+                <a class="nav-link" asp-controller="Enterprise" asp-action="Index">Предприятия</a>
+            </li>
+            <li class="nav-item @(ViewBag.SelectedItem?.ToString() == "CompensationType" ? "active" : "" )">
+                <a class="nav-link" asp-controller="CompensationType" asp-action="Index">Типы компенсаций</a>
+            </li>
+            <li class="nav-item @(ViewBag.SelectedItem?.ToString() == "SC" ? "active" : "" )">
+                <a class="nav-link" asp-controller="SC" asp-action="Index">Сервисные центры</a>
+            </li>
+            <li class="nav-item @(ViewBag.SelectedItem?.ToString() == "Department" ? "active" : "" )">
+                <a class="nav-link" asp-controller="Department" asp-action="Index">Отделы</a>
+            </li>
+            <a asp-action="Logout" asp-controller="Account" class="nav-link">Выйти</a>
+        </ul>
+    </div>
+</nav>
+
+
+

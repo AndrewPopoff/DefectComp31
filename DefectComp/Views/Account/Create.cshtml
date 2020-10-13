@@ -1,0 +1,31 @@
+﻿@model AppUserCreateModel
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-warning">@TempData["message"]</div>
+}
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Page" />
+    <input type="hidden" asp-for="ReturnUrl" />
+    <input type="hidden" asp-for="Sort" />
+
+    <div class="form-group">
+        <label asp-for="Name">Имя пользователя</label>
+        <div><span asp-validation-for="Name" class="text-danger"></span></div>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Pwd">Пароль</label>
+        <div><span asp-validation-for="Pwd" class="text-danger"></span></div>
+        <input asp-for="Pwd" class="form-control" />
+    </div>
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Сохранить</button>
+        <a class="btn btn-default" href="@Model.ReturnUrl">Отмена</a>
+    </div>
+</form>

@@ -1,0 +1,9 @@
+﻿@model NoteEditModel
+@if (User.Identity.Name == "Admin")
+{
+<form asp-action="DeleteNote" method="post" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#orderNotesTable">
+    <input type="hidden" name="noteID" value="@Model.Note.NoteID" />
+    <input type="hidden" name="orderID" value="@Model.Note.DataID" />
+    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены, что хотите удалить выбранную запись?');">Удалить</button>
+</form>
+}

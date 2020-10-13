@@ -1,0 +1,52 @@
+﻿@model DepartmentEditModel
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-warning">@TempData["message"]</div>
+}
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Department.DepartmentID" />
+    <input type="hidden" asp-for="Page" />
+    <input type="hidden" asp-for="ReturnUrl" />
+    <input type="hidden" asp-for="Sort" />
+
+    <div class="form-group">
+        <label asp-for="Department.DepartmentDesc">Наименование отдела</label>
+        <div><span asp-validation-for="Department.DepartmentDesc" class="text-danger"></span></div>
+        <input asp-for="Department.DepartmentDesc" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Department.DepStyle">Стиль отображения отдела</label>
+        <select asp-for="Department.DepStyle" class="form-control">
+            @*<option disabled selected value="">Выберите стиль отображения, пожалуйста</option>*@
+            <option value="">без стиля</option>
+            <option value="dep-indian-red">индийский красный</option>
+            <option value="dep-spring-green">весенний зеленый</option>
+            <option value="dep-deep-pink">глубокий розовый</option>
+            <option value="dep-orange-red">оранжево-красный</option>
+            <option value="dep-gold">золотой</option>
+            <option value="dep-blue-sky">небесно-голубой</option>
+            <option value="dep-fuxia">фуксия</option>
+        </select>
+
+        @*<input asp-for="Department.DepColor" type="color" list="colorList" class="form-control-sm" />
+        <datalist id="colorList">
+            <option value="#CD5C5C">индийский красный</option>
+            <option value="#00FA9A">весенний зеленый</option>
+            <option value="#FF1493">глубокий розовый</option>
+            <option value="#FF4500">оранжево-красный</option>
+            <option value="#FFD700">золотой</option>
+            <option value="#00BFFF">небесно-голубой</option>
+            <option value="#FF00FF">фуксия</option>
+        </datalist>*@
+    </div>
+
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Сохранить</button>
+        <a class="btn btn-default" href="@Model.ReturnUrl">Отмена</a>
+    </div>
+</form>

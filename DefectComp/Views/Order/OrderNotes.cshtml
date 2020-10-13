@@ -1,0 +1,34 @@
+﻿@model NoteViewModel
+
+@{
+    Layout = "_LayoutListOrderNotes";
+}
+<br />
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-warning">@TempData["message"]</div>
+}
+
+
+@(Html
+        .Grid(Model.Notes)
+        .Build(columns =>
+        {
+            columns.Add(model => model.NoteDate).Titled("Дата").Formatted("{0:d}").Filterable(false);
+            columns.Add(model => model.UserID).Titled("Пользователь").Filterable(false);
+            columns.Add(model => model.NoteText).Titled("Комментарий").Filterable(false);
+            columns.Add(model => Html.Partial("DeleteBtnNote", new NoteEditModel { Note = model, Page = Model.Page, Sort = Model.Sort })).Titled("Действия");
+        })
+        .Using(GridFilterMode.Excel)
+        .Empty("Нет данных")
+        .AppendCss("table-hover") //table-striped
+        .Pageable(pager =>
+        {
+            pager.CurrentPage = Model.Page;
+        })
+)
+
+<script>
+    document.getElementById("Note_NoteText").value = "";
+</script>
+

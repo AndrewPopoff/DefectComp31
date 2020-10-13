@@ -1,0 +1,120 @@
+﻿@model OrderViewModel
+
+@{
+    ViewData["Title"] = "Заявки";
+    Layout = "_LayoutList";
+}
+
+<form asp-action="ApplyFilter" method="post" class="form-inline">
+    <button class="btn btn-primary" type="submit">Обновить</button>
+    &nbsp;
+    <input asp-for="StartDate" class="form-control" type="date" />
+    <label asp-for="EndDate">&nbsp;по&nbsp;</label>
+    <input asp-for="EndDate" class="form-control" type="date" />
+    &nbsp;
+    @*<div class="form-check">
+            <input class="form-check-input" asp-for="FlagClosed" type="radio" value="0" id="FlagClosed0" />
+            <label class="form-check-label" for="FlagClosed0">все записи</label>
+        </div>
+        &nbsp;
+        <div class="form-check">
+            <input class="form-check-input" asp-for="FlagClosed" type="radio" value="1" id="FlagClosed1" />
+            <label class="form-check-label" for="FlagClosed1">открытые</label>
+        </div>
+        &nbsp;
+        <div class="form-check">
+            <input class="form-check-input" asp-for="FlagClosed" type="radio" value="2" id="FlagClosed2" />
+            <label class="form-check-label" for="FlagClosed2">закрытые</label>
+        </div>*@
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-primary" for="FlagClosed0">
+            <input asp-for="FlagClosed" type="radio" value="0" id="FlagClosed0" />все записи
+        </label>
+        <label class="btn btn-primary" for="FlagClosed1">
+            <input asp-for="FlagClosed" type="radio" value="1" id="FlagClosed1" />открытые
+        </label>
+        <label class="btn btn-primary" for="FlagClosed2">
+            <input asp-for="FlagClosed" type="radio" value="2" id="FlagClosed2" />закрытые
+        </label>
+    </div>
+
+    <input type="hidden" asp-for="@Model.Sort" />
+</form>
+<br />
+<div class="text-left">
+    <a asp-action="Create" class="btn btn-primary" asp-route-page="@Model.Page"
+       asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()"
+       asp-route-sort="@Model.Sort">Добавить новую запись</a>
+</div>
+<br />
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-warning">
+        @TempData["message"]
+        @if (Model.CurrentID != 0)
+        {
+            <a asp-action="Index"
+               asp-route-currentID="@Model.CurrentID"
+               asp-route-flagUpdate="true"
+               asp-route-page="@Model.Page"
+               asp-route-sort="@Model.Sort"
+               class="btn btn-primary">Перейти к записи</a>
+        }
+    </div>
+}
+@(Html
+                            .Grid(Model.Orders)
+                            .Build(columns =>
+                            {
+                                //columns.Add().Titled("").Css("order-number");
+                                // ниже строка - это отображение иконки обработанного документа, убрал, так как есть аналог в виде зачеркнутой даты
+                                //columns.Add().Titled("").RenderedAs(model => model.FlagClosed == 1 ? Html.Raw("<img src=\"/img/check.png\" width=\"32\" height=\"32\" />") : null);
+                                columns.Add(model => model.Number).Titled("№").Css("order-number");
+                                columns.Add(model => model.DocDate).Titled("Дата").Formatted("{0:d}").Filterable(false);
+                                columns.Add(model => model.PeriodDays).Titled("Срок").RenderedAs(model => CalculColumn.GetPeriodDays(model.RefDate)).Filterable(false).Sortable(false).Css("period-days");
+
+                                //columns.Add(model => model.RefNumber).Titled("Справка"); поменял на ссылку на редактировани, см. ниже
+                                columns.Add(model => Html.ActionLink(
+                                    model.RefNumber,
+                                    "Edit",
+                                    "Order",
+                                    new
+                                    {
+                                        orderID = model.ID,
+                                        page = Model.Page,
+                                        returnUrl = ViewContext.HttpContext.Request.PathAndQuery(),
+                                        sort = Model.Sort
+                                    }
+                                    )).Titled("Справка");
+
+                                columns.Add(model => model.RefDate).Titled("Дата справки").Formatted("{0:d}").Filterable(false);
+                                columns.Add(model => model.Goods.GoodsName).Titled("Товар");
+                                columns.Add(model => model.Model).Titled("Модель");
+                                columns.Add(model => model.SN).Titled("Серийный номер");
+                                columns.Add(model => model.Seller.EnterpriseDesc).Titled("Продавец");
+                                columns.Add(model => model.CustomerDesc).Titled("Клиент");
+                                columns.Add(model => model.Department.DepartmentDesc).Titled("Отдел");
+                                columns.Add(model => model.Status.StatusDesc).Titled("Статус");
+                                columns.Add(model => Html.Partial("EditDeleteBtns", new OrderEditModel { Order = model, Page = Model.Page, Sort = Model.Sort })).Titled("Действия");
+                            })
+                            .Using(GridFilterMode.Excel)
+                            .Empty("Нет данных")
+                            .AppendCss("table-hover table-responsive") //table-striped
+                            .RowAttributed(model => new
+                            {
+                                @class = ((model.Department.DepStyle ?? "") != "" ? model.Department.DepStyle : "") +
+                                " " +
+                                (model.ID == Model.CurrentID ? "bg-success" : "") +
+                                " " +
+                                (model.FlagClosed == 1 ? "undercore" : "")
+                            })
+            .Filterable()
+            .Sortable()
+            .Pageable(pager =>
+            {
+                pager.CurrentPage = Model.Page;
+            })
+)
+
+

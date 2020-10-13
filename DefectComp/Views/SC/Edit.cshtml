@@ -1,0 +1,25 @@
+﻿@model SCEditModel
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-warning">@TempData["message"]</div>
+}
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="SC.SC_ID" />
+    <input type="hidden" asp-for="Page" />
+    <input type="hidden" asp-for="ReturnUrl" />
+    <input type="hidden" asp-for="Sort" />
+
+    <div class="form-group">
+        <label asp-for="SC.SCDesc">Наименование сервисного центра</label>
+        <div><span asp-validation-for="SC.SCDesc" class="text-danger"></span></div>
+        <input asp-for="SC.SCDesc" class="form-control" />
+    </div>
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Сохранить</button>
+        <a class="btn btn-default" href="@Model.ReturnUrl">Отмена</a>
+    </div>
+</form>

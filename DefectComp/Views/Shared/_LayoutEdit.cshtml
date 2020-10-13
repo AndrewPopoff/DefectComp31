@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width = device-width" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/StyleSheet.css" />
+    <link rel="stylesheet" href="~/css/mvc-lookup/mvc-lookup.css" />
+</head>
+
+<body>
+    <div>
+        @Html.Partial("MvcLookup/_Dialog")
+
+        <div id="navmenu">
+            @await Component.InvokeAsync("NavigationMenu")
+        </div>
+        &nbsp;
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
+    </div>
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/js/mvc-lookup/mvc-lookup.js"></script>
+    <script>
+        document.querySelectorAll(".mvc-lookup").forEach(element => new MvcLookup(element));
+
+        MvcLookup.lang = {
+            error: "Ошибка!",
+            noData: "Нет данных",
+            select: "Выбор ({0})",
+            search: "Поиск...",
+            more: "больше..."
+        };
+
+    </script>
+</body>
+</html>

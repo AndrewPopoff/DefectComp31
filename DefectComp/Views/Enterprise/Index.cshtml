@@ -1,0 +1,50 @@
+﻿@model EnterpriseViewModel
+
+@{
+    ViewData["Title"] = "Предприятия";
+    Layout = "_LayoutList";
+}
+
+<div class="text-left">
+    <a asp-action="Create" class="btn btn-primary" asp-route-page="@Model.Page"
+       asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()"
+       asp-route-sort="@Model.Sort">Добавить новое предприятие</a>
+</div>
+<br />
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-warning">
+        @TempData["message"]
+        @if (Model.CurrentID != 0)
+        {
+        <a asp-action="Index"
+           asp-route-currentID="@Model.CurrentID"
+           asp-route-flagUpdate="true"
+           asp-route-page="@Model.Page"
+           asp-route-sort="@Model.Sort"
+           class="btn btn-primary">Перейти к записи</a>
+        }
+    </div>
+}
+
+@(Html
+    .Grid(Model.Enterprises)
+    .Build(columns =>
+    {
+        //columns.Add(model => model.StatusID).Titled("Код статуса");
+        columns.Add(model => model.EnterpriseDesc).Titled("Наименование предприятия");
+        columns.Add(model => Html.Partial("EditDeleteBtns", new EnterpriseEditModel { Enterprise = model, Page = Model.Page, Sort = Model.Sort })).Titled("Действия");
+    })
+    .Using(GridFilterMode.Header)
+    .Empty("Нет данных")
+    .AppendCss("table-hover") //table-striped
+    .RowAttributed(model => new { @class = model.EnterpriseID == Model.CurrentID ? "bg-success" : null, data_id = model.EnterpriseID })
+    .Filterable()
+    .Sortable()
+    .Pageable(pager =>
+    {
+        pager.CurrentPage = Model.Page;
+    })
+)
+

@@ -1,0 +1,25 @@
+﻿@model EnterpriseEditModel
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-warning">@TempData["message"]</div>
+}
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Enterprise.EnterpriseID" />
+    <input type="hidden" asp-for="Page" />
+    <input type="hidden" asp-for="ReturnUrl" />
+    <input type="hidden" asp-for="Sort" />
+
+    <div class="form-group">
+        <label asp-for="Enterprise.EnterpriseDesc">Наименование предприятия</label>
+        <div><span asp-validation-for="Enterprise.EnterpriseDesc" class="text-danger"></span></div>
+        <input asp-for="Enterprise.EnterpriseDesc" class="form-control" />
+    </div>
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Сохранить</button>
+        <a class="btn btn-default" href="@Model.ReturnUrl">Отмена</a>
+    </div>
+</form>

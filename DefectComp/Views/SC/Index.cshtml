@@ -1,0 +1,49 @@
+﻿@model SCViewModel
+
+@{
+    ViewData["Title"] = "Сервисные центры";
+    Layout = "_LayoutList";
+}
+
+<div class="text-left">
+    <a asp-action="Create" class="btn btn-primary" asp-route-page="@Model.Page"
+       asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()"
+       asp-route-sort="@Model.Sort">Добавить новый СЦ</a>
+</div>
+<br />
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-warning">
+        @TempData["message"]
+        @if (Model.CurrentID != 0)
+        {
+        <a asp-action="Index"
+           asp-route-currentID="@Model.CurrentID"
+           asp-route-flagUpdate="true"
+           asp-route-page="@Model.Page"
+           asp-route-sort="@Model.Sort"
+           class="btn btn-primary">Перейти к записи</a>
+        }
+    </div>
+}
+
+@(Html
+    .Grid(Model.SCs)
+    .Build(columns =>
+    {
+        columns.Add(model => model.SCDesc).Titled("Наименование СЦ");
+        columns.Add(model => Html.Partial("EditDeleteBtns", new SCEditModel { SC = model, Page = Model.Page, Sort = Model.Sort })).Titled("Действия");
+    })
+    .Using(GridFilterMode.Header)
+    .Empty("Нет данных")
+    .AppendCss("table-hover")
+    .RowAttributed(model => new { @class = model.SC_ID == Model.CurrentID ? "bg-success" : null, data_id = model.SC_ID })
+    .Filterable()
+    .Sortable()
+    .Pageable(pager =>
+    {
+        pager.CurrentPage = Model.Page;
+    })
+)
+

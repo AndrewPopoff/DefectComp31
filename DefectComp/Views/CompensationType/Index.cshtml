@@ -1,0 +1,49 @@
+﻿@model CompensationTypeViewModel;
+
+@{
+    ViewData["Title"] = "Типы компенсаций";
+    Layout = "_LayoutList";
+}
+
+<div class="text-left">
+    <a asp-action="Create" class="btn btn-primary" asp-route-page="@Model.Page"
+       asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()"
+       asp-route-sort="@Model.Sort">Добавить новый тип</a>
+</div>
+<br />
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-warning">
+        @TempData["message"]
+        @if (Model.CurrentID != 0)
+        {
+            <a asp-action="Index"
+               asp-route-currentID="@Model.CurrentID"
+               asp-route-flagUpdate="true"
+               asp-route-page="@Model.Page"
+               asp-route-sort="@Model.Sort"
+               class="btn btn-primary">Перейти к записи</a>
+        }
+    </div>
+}
+
+@(Html
+        .Grid(Model.CompensationTypes)
+        .Build(columns =>
+        {
+            columns.Add(model => model.TypeDesc).Titled("Тип компенсации");
+            columns.Add(model => Html.Partial("EditDeleteBtns", new CompensationTypeEditModel { CompensationType = model, Page = Model.Page, Sort = Model.Sort })).Titled("Действия");
+        })
+        .Using(GridFilterMode.Header)
+        .Empty("Нет данных")
+        .AppendCss("table-hover") //table-striped
+        .RowAttributed(model => new { @class = model.TypeID == Model.CurrentID ? "bg-success" : null, data_id = model.TypeID })
+        .Filterable()
+        .Sortable()
+        .Pageable(pager =>
+        {
+            pager.CurrentPage = Model.Page;
+        })
+)
+

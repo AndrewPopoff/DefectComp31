@@ -1,0 +1,49 @@
+﻿@model DepartmentViewModel
+
+@{
+    ViewData["Title"] = "Отделы";
+    Layout = "_LayoutList";
+}
+
+<div class="text-left">
+    <a asp-action="Create" class="btn btn-primary" asp-route-page="@Model.Page"
+       asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()"
+       asp-route-sort="@Model.Sort">Добавить новый отдел</a>
+</div>
+<br />
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-warning">
+        @TempData["message"]
+        @if (Model.CurrentID != 0)
+        {
+            <a asp-action="Index"
+               asp-route-currentID="@Model.CurrentID"
+               asp-route-flagUpdate="true"
+               asp-route-page="@Model.Page"
+               asp-route-sort="@Model.Sort"
+               class="btn btn-primary">Перейти к записи</a>
+        }
+    </div>
+}
+
+@(Html
+        .Grid(Model.Departments)
+        .Build(columns =>
+        {
+            columns.Add(model => model.DepartmentDesc).Titled("Наименование отдела");
+            columns.Add(model => Html.Partial("EditDeleteBtns", new DepartmentEditModel { Department = model, Page = Model.Page, Sort = Model.Sort })).Titled("Действия");
+        })
+        .Using(GridFilterMode.Header)
+        .Empty("Нет данных")
+        .AppendCss("table-hover")
+        .RowAttributed(model => new { @class = model.DepartmentID == Model.CurrentID ? "bg-success" : null, data_id = model.DepartmentID })
+        .Filterable()
+        .Sortable()
+        .Pageable(pager =>
+        {
+            pager.CurrentPage = Model.Page;
+        })
+)
+

@@ -1,0 +1,20 @@
+﻿@model CommonLogViewModel
+
+@{
+    Layout = "_LayoutListOrderNotes";
+}
+<br />
+
+@(Html
+    .Grid(Model.CommonLogs)
+    .Build(columns =>
+    {
+        columns.Add(model => model.ActionDate).Titled("Дата").Formatted("{0:d}").Filterable(false);
+        columns.Add(model => model.UserDesc).Titled("Пользователь").Filterable(false);
+        columns.Add(model => model.TxtMsg).Titled("Действие").Filterable(false);
+    })
+    .Using(GridFilterMode.Excel)
+    .Empty("Нет данных")
+    .AppendCss("table-hover") //table-striped
+    .Pageable()
+)

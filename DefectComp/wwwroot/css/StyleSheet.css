@@ -1,0 +1,38 @@
+﻿.input-validation-error {
+    border-color: red;
+    background-color: #fee;
+}
+
+.dep-indian-red .order-number {
+    background-color: #CD5C5C;
+}
+
+.dep-spring-green .order-number {
+    background-color: #00FA9A;
+}
+
+.dep-deep-pink .order-number {
+    background-color: #FF1493;
+}
+
+.dep-orange-red .order-number {
+    background-color: #FF4500;
+}
+
+.dep-gold .order-number {
+    background-color: #FFD700;
+}
+
+.dep-blue-sky .order-number {
+    background-color: #00BFFF;
+}
+
+.dep-fuxia .order-number {
+    background-color: #FF00FF;
+}
+
+.undercore .period-days {
+    text-decoration: line-through;
+}
+
+

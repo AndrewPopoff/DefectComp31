@@ -1,0 +1,13 @@
+﻿@model SCEditModel
+<form asp-action="Delete" method="post">
+    <a asp-action="Edit" class="btn btn-warning btn-sm"
+       asp-route-SC_ID="@Model.SC.SC_ID"
+       asp-route-page="@Model.Page"
+       asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()"
+       asp-route-sort="@Model.Sort">Редактирование</a>
+
+    <input type="hidden" name="SC_ID" value="@Model.SC.SC_ID" />
+    <input type="hidden" asp-for="@Model.Page" />
+    <input type="hidden" asp-for="@Model.Sort" />
+    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены, что хотите удалить выбранную запись?');">Удалить</button>
+</form>

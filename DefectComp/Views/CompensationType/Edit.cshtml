@@ -1,0 +1,25 @@
+﻿@model CompensationTypeEditModel
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-warning">@TempData["message"]</div>
+}
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="CompensationType.TypeID" />
+    <input type="hidden" asp-for="Page" />
+    <input type="hidden" asp-for="ReturnUrl" />
+    <input type="hidden" asp-for="Sort" />
+
+    <div class="form-group">
+        <label asp-for="CompensationType.TypeDesc ">Наименование типа компенсации</label>
+        <div><span asp-validation-for="CompensationType.TypeDesc" class="text-danger"></span></div>
+        <input asp-for="CompensationType.TypeDesc" class="form-control" />
+    </div>
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Сохранить</button>
+        <a class="btn btn-default" href="@Model.ReturnUrl">Отмена</a>
+    </div>
+</form>

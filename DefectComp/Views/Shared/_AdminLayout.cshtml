@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width = device-width" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/StyleSheet.css" />
+</head>
+
+<body class="panel panel-default">
+    <h1 class="text-center">Компенсация брака</h1>
+    @*<div class="panel-heading">
+        <h4 class="text-center">Войдите в программу</h4>
+    </div>*@
+    @*<div class="panel-body">
+        </div>*@
+    <div class="container-fluid">
+        @if (TempData["message"] != null)
+        {
+            <div class="alert alert-success">TempData["message"]</div>
+        }
+
+        @RenderBody()
+    </div>
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+﻿@model OrderEditModel
+
+@{
+    Layout = "_LayoutEdit";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<ul class="nav nav-pills">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="pill" href="#mainForm">Основные сведения</a>
+    </li>
+    <li class="nav-item">
+        @if (Model.Order.ID == 0)
+        {
+            <a class="nav-link disabled" data-toggle="pill" href="#notes">Заметки</a>
+        }
+        else
+        {
+            <a class="nav-link" data-toggle="pill" href="#notes">Заметки</a>
+        }
+    </li>
+    <li class="nav-item">
+        @if (Model.Order.ID == 0)
+        {
+            <a class="nav-link disabled" data-toggle="pill" href="#actions">Действия</a>
+        }
+        else
+        {
+            <a class="nav-link" data-toggle="pill" href="#actions">Действия</a>
+        }
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="mainForm">
+        @if (TempData["message"] != null)
+        {
+            <div class="alert alert-warning">@TempData["message"]</div>
+        }
+
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Order.ID" />
+            <input type="hidden" asp-for="Page" />
+            <input type="hidden" asp-for="ReturnUrl" />
+            <input type="hidden" asp-for="Sort" />
+
+            <div><span asp-validation-for="Order.DocDate" class="text-danger"></span></div>
+            <div class="form-group row">
+                <label asp-for="Order.DocDate" class="col-form-label col-sm-4">Дата документа</label>
+                <div class="col-sm-2">
+                    <input asp-for="Order.DocDate" class="form-control" type="date" />
+                </div>
+            </div>
+
+            <input asp-for="Order.Number" type="hidden" />
+
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <div class="form-check">
+                        <input class="form-check-input" asp-for="Order.FlagClosedBool" type="checkbox" />
+                        <label asp-for="Order.FlagClosedBool" class="form-check-label">Документ обработан</label>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <input asp-for="Order.ClosedDate" class="form-control" type="date" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label asp-for="Order.RefNumber">Номер справки</label>
+                </div>
+                <div class="col-sm-8">
+                    <input asp-for="Order.RefNumber" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label asp-for="Order.RefDate">Дата справки</label>
+                </div>
+                <div class="col-sm-2">
+                    <input asp-for="Order.RefDate" type="date" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label asp-for="Order.SC_ID">Сервисный центр</label>
+                </div>
+                <div class="col-sm-8">
+                    <select asp-for="Order.SC_ID" class="form-control" asp-items="@Model.Order.itemsSC"></select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label asp-for="Order.CustomerDesc">Клиент</label>
+                </div>
+                <div class="col-sm-8">
+                    <input asp-for="Order.CustomerDesc" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.GoodsID" class="col-sm-4">Товар</label>
+                <div mvc-lookup-for="Order.GoodsID" url="LookupGoods" title="Выбор товара" class="col-sm-8"></div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.ProduceDate" class="col-sm-4">Дата производства</label>
+                <div class="col-sm-2">
+                    <input asp-for="Order.ProduceDate" type="date" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.ProviderSaleDate" class="col-sm-4">Дата продажи</label>
+                <div class="col-sm-2">
+                    <input asp-for="Order.ProviderSaleDate" type="date" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.Model" class="col-sm-4">Модель</label>
+                <div class="col-sm-8">
+                    <input asp-for="Order.Model" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.SN" class="col-sm-4">Серийный номер</label>
+                <div class="col-sm-8">
+                    <input asp-for="Order.SN" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.SellerID" class="col-sm-4">Продавец</label>
+                <div mvc-lookup-for="Order.SellerID" url="LookupEnterprises" title="Выбор предприятия" class="col-sm-8"></div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.GoodsCost" class="col-sm-4">Стоимость товара</label>
+                <div class="col-sm-2">
+                    <input class="form-control" asp-for="Order.GoodsCost" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.StatusID" class="col-sm-4">Статус</label>
+                <div class="col-sm-8">
+                    <select asp-for="Order.StatusID" class="form-control" asp-items="@Model.Order.itemsStatus"></select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.CompTypeID" class="col-sm-4">Тип компенсации</label>
+                <div class="col-sm-8">
+                    <select asp-for="Order.CompTypeID" class="form-control" asp-items="@Model.Order.itemsCompType"></select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.DepartmentID" class="col-sm-4">Отдел</label>
+                <div class="col-sm-8">
+                    <select asp-for="Order.DepartmentID" class="form-control" asp-items="@Model.Order.itemsDep"></select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.ProviderID" class="col-sm-4">Поставщик</label>
+                <div mvc-lookup-for="Order.ProviderID" url="LookupEnterprises" title="Выбор предприятия" class="col-sm-8"></div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.SFNumber" class="col-sm-4">№ документа (СФ, УПД, ТОРГ 12)</label>
+                <div class="col-sm-2">
+                    <input asp-for="Order.SFNumber" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.SFDate" class="col-sm-4">Дата документа (СФ, УПД, ТОРГ 12)</label>
+                <div class="col-sm-2">
+                    <input type="date" asp-for="Order.SFDate" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.NumInvoiceOPT" class="col-sm-4">№ документа опт</label>
+                <div class="col-sm-2">
+                    <input asp-for="Order.NumInvoiceOPT" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Order.DateInvoiceOPT" class="col-sm-4">Дата документа опт</label>
+                <div class="col-sm-2">
+                    <input type="date" asp-for="Order.DateInvoiceOPT" class="form-control" />
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button class="btn btn-primary" type="submit">Сохранить</button>
+                <a class="btn btn-default" href="@Model.ReturnUrl">Отмена</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="tab-pane fade" id="notes">
+        <div id="orderNotesTable">
+            @await Html.PartialAsync("OrderNotes", Model.NoteViewModel)
+        </div>
+        <br/>
+        <div class="container-fluid">
+            <form asp-action="OrderNotes" method="post" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#orderNotesTable" id="noteForm">
+                <input type="hidden" asp-for="Note.DataID" />
+                <input type="hidden" asp-for="Note.NoteID" />
+                <div class="form-group row">
+                    <label asp-for="Note.UserID" class="col-sm-4">Пользователь</label>
+                    <div class="col-sm-8">
+                        <input asp-for="Note.UserID" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Note.NoteDate" class="col-sm-4">Дата</label>
+                    <div class="col-sm-2">
+                        <input asp-for="Note.NoteDate" class="form-control" type="date" readonly />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Note.NoteText" class="col-sm-4">Комментарий</label>
+                    <div class="col-sm-8">
+                        <textarea asp-for="Note.NoteText" class="form-control" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary" type="submit" id="submitNote">Добавить новый комментарий</button>
+                </div>
+            </form>
+        </div>
+
+
+    </div>
+    <div class="tab-pane fade" id="actions">
+        @await Html.PartialAsync("OrderActions", Model.CommonLogViewModel)
+    </div>
+</div>
+
